@@ -26,6 +26,10 @@ RUN apt install -y \
     fuse-overlayfs
 # ---------------------------------------------------------------
 
+# # Clean up apt cache to reduce image size
+# # RUN apt-get clean && \
+#     # rm -rf /var/lib/apt/lists/*
+
 USER $USERNAME
 
 # Copy and set up entrypoint script (relative to .devcontainer/)
