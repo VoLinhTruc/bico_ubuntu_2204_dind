@@ -1,0 +1,62 @@
+name: Check Sandbox Workflow and Trigger Build
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Run every 5 minutes
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  check-and-trigger:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check bico_ubuntu_2204_sandbox workflow status
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const owner = 'VoLinhTruc';
+          const repo = 'bico_ubuntu_2204_sandbox';
+          const workflowName = 'Docker Image CI';  // Update with actual workflow name if different
+          
+          const workflows = await github.rest.actions.listRepoWorkflows({
+            owner,
+            repo
+          });
+          
+          const workflow = workflows.data.workflows.find(w => w.name === workflowName);
+          
+          if (!workflow) {
+            console.log('Workflow not found');
+            return;
+          }
+          
+          const runs = await github.rest.actions.listWorkflowRuns({
+            owner,
+            repo,
+            workflow_id: workflow.id,
+            status: 'completed',
+            per_page: 1
+          });
+          
+          if (runs.data.workflow_runs.length > 0) {
+            const latestRun = runs.data.workflow_runs[0];
+            console.log(`Latest run ID: ${latestRun.id}`);
+            console.log(`Latest run conclusion: ${latestRun.conclusion}`);
+            console.log(`Latest run created at: ${latestRun.created_at}`);
+            
+            if (latestRun.conclusion === 'success') {
+              console.log('Triggering bico_ubuntu_2204_dind workflow...');
+              
+              // Trigger the dispatch event
+              await github.rest.repos.createDispatchEvent({
+                owner: 'VoLinhTruc',
+                repo: 'bico_ubuntu_2204_dind',
+                event_type: 'trigger-from-bico-ubuntu-2204-sandbox'
+              });
+              
+              console.log('Successfully triggered bico_ubuntu_2204_dind workflow');
+            }
+          } else {
+            console.log('No completed workflow runs found');
+          }
