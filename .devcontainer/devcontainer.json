@@ -1,0 +1,22 @@
+{
+
+  "name": "bico_ubuntu_dind",
+  // Build configuration
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".",
+    "args": {}
+  },
+  // Container runtime configuration
+  "runArgs": [
+    "--name", "bico_ubuntu_dind",
+    "--privileged",
+    // "--network", "host",
+  ],
+
+  // "postCreateCommand": "" ,
+  "postStartCommand": "/entrypoint.sh",
+  // "postAttachCommand": "",
+
+
+}
