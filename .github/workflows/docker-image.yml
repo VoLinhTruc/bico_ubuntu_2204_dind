@@ -5,8 +5,7 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  repository_dispatch:
-    types: [trigger-from-bico-ubuntu-2204-sandbox]
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
   build:
