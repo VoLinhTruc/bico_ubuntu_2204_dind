@@ -8,6 +8,12 @@ ENV DOCKER_GID=999
 USER root
 
 # Install Docker CLI ---------------------------------------------
+
+# Basic, Docker cli only -------------------
+# RUN apt-get update && apt install
+# -----------------------------------------
+
+# Advance, Docker cli and more -------------------
 RUN apt-get update && apt install -y ca-certificates curl gnupg lsb-release
 
 # Add Docker's official GPG key
@@ -21,6 +27,7 @@ RUN echo \
 
 RUN apt update
 RUN apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+# -----------------------------------------
 
 RUN apt install -y \
     fuse-overlayfs
