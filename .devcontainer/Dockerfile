@@ -4,6 +4,8 @@ ENV DOCKER_GID=999
 
 # ENV http_proxy=http://$MY_PROXY_IP:$MY_PROXY_PORT
 # ENV https_proxy=http://$MY_PROXY_IP:$MY_PROXY_PORT
+# ENV NO_PROXY="localhost,127.0.0.1,::1,*.local"
+# ENV no_proxy="$NO_PROXY"
 
 USER root
 
