@@ -9,6 +9,9 @@ ENV DOCKER_GID=999
 
 USER root
 
+RUN groupadd -for -g $DOCKER_GID docker \
+ && usermod -aG docker $USERNAME
+
 # Install Docker CLI ---------------------------------------------
 
 # Basic, Docker cli only -------------------
